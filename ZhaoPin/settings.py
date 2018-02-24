@@ -52,7 +52,10 @@ DEFAULT_REQUEST_HEADERS = {
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
-   'ZhaoPin.middlewares.ZhaopinDownloaderMiddleware': 543,
+    'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
+    'scrapy.contrib.downloadermiddleware.httpproxy.HttpProxyMiddleware': None,
+    'ZhaoPin.middlewares.RandomUserAgentMiddleware': 430,
+    'ZhaoPin.middlewares.HttpProxyMiddleware': 450,
 }
 
 # Enable or disable extensions
