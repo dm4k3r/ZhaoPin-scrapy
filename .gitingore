@@ -4,16 +4,17 @@ ehthumbs.db
 Desktop.ini
 
 # Python:
-*.py[cod]
+*.pyc
 *.so
 *.egg
 *.egg-info
-dist
-build
-dbs
-eggs
-logs
-project.egg-info
+/dist/
+/build/
+/dbs/
+/eggs/
+/logs/
+/project.egg-info/
+__pycache__
 
 
 # My configurations:
