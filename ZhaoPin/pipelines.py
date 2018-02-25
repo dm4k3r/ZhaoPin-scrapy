@@ -7,7 +7,6 @@
 import MySQLdb.cursors
 from twisted.enterprise import adbapi
 import redis
-import pandas as pd
 from scrapy.exceptions import DropItem
 import logging
 
