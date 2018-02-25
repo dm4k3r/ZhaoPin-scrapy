@@ -67,7 +67,7 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-#   'ZhaoPin.pipelines.DuplicatePipeline': 290,
+   'ZhaoPin.pipelines.DuplicatePipeline': 290,
    'ZhaoPin.pipelines.MysqlTwsitedPipeline': 300,
 }
 

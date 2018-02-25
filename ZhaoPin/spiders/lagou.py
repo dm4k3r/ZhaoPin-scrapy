@@ -21,7 +21,7 @@ class LagouSpider(CrawlSpider):
     custom_settings = {
         "spider_name": "lagou",
         'COOKIES_ENABLED': False,
-        'DOWNLOAD_DELAY': 3,
+        'DOWNLOAD_DELAY': 1,
         'DEFAULT_REQUEST_HEADERS': {
             'Host': 'www.lagou.com',
             'Accept': 'text/html,application/xhtml+xml,application/xml',

@@ -24,18 +24,21 @@ class DuplicatePipeline(object):
     def __init__(self, dbparmas, spider_name):
         redis_db.flushall()
         mysql_cn = MySQLdb.connect(**dbparmas)
+        cur = mysql_cn.cursor()
         db_table = spider_name
         if redis_db.hlen(redis_data_dict) == 0:
-            sql = "SELECT url_id FROM {}".format(db_table)
-            df = pd.read_sql(sql, con=mysql_cn)
-            for id in df['url_id'].get_values():
-                redis_db.hset(redis_data_dict, id, 0)
+            sql = "SELECT url_id FROM {0}".format(db_table)
+            cur.execute(sql)
+            df = cur.fetchall()
+            for id in df:
+                redis_db.hset(redis_data_dict, id['url_id'], 0)
+            cur.close()
 
     @classmethod
     def from_settings(cls, settings):
         dbparmas = dict(
             host = settings['MYSQL_HOST'],
-            db = settings['MYSQL_DBNAME'],
+            db = settings['DB_NAME'],
             user = settings['MYSQL_USERNAME'],
             password = settings['MYSQL_PASSWORD'],
             charset = 'utf8',
