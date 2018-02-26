@@ -14,6 +14,7 @@ class LagouSpider(CrawlSpider):
 
     rules = (
         Rule(LinkExtractor(allow=r'zhaopin/[a-zA-z]/'), follow=True),
+        Rule(LinkExtractor(allow=r'zhaopin/[a-zA-z]/\d+/'), follow=True),
         Rule(LinkExtractor(allow=r'gongsi/\d+.html'), follow=True),
         Rule(LinkExtractor(allow=r'gongsi/j\d+.html'), follow=True),
         Rule(LinkExtractor(allow=r'jobs/\d+.html'), callback='parse_item', follow=True),
@@ -51,6 +52,7 @@ class LagouSpider(CrawlSpider):
         description = description_selector.xpath('string(.)').extract()
         Item.add_value('description', description)
         Item.add_xpath('address', '//div[@class="work_addr"]/a/text()')
+        Item.add_xpath('publish_time', '//p[@class="publish_time"]/text()')
         Item.add_value('crawl_created_time', datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         Item.add_value('crawl_updated_time', datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         yield Item.load_item()

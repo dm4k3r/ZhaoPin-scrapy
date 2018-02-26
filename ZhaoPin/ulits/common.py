@@ -1,4 +1,7 @@
 import hashlib
+import re
+from datetime import datetime
+from datetime import timedelta
 
 
 def get_md5(url):
@@ -7,6 +10,15 @@ def get_md5(url):
     m = hashlib.md5()
     m.update(url)
     return m.hexdigest()
+
+def filter_url(value):
+    if isinstance(value, list):
+        value = value[0]
+    if re.match("(https://www.lagou.com/jobs/\d+.html)", value):
+        filter_url = re.match("(https://www.lagou.com/jobs/\d+.html)", value).group()
+        return [filter_url]
+    else:
+        return value
 
 def wages_convert(value):
     """
@@ -106,3 +118,25 @@ def filter_addrs(value):
         return [value]
     else:
         return [value]
+
+def filter_publish_time(value):
+    """
+    过滤并转换发布时间为date类型
+    """
+    if isinstance(value, list):
+        value = value[0]
+    if re.match('(\d{4}-\d{2}-\d{2}).*', value):
+        publish_time = re.match('(\d{4}-\d{2}-\d{2}).*', value).group(1)
+        return [publish_time]
+    if re.match('(\d{2}:\d{2}).*', value):
+        time_now = datetime.now()
+        publish_time = time_now.strftime('%Y-%m-%d')
+        return [publish_time]
+    if '天' in value:
+        day = int(re.match('(\d+)天.*', value).group(1))
+        publish_time = (datetime.now()-timedelta(days=day)).strftime('%Y-%m-%d')
+        return [publish_time]
+
+
+a = filter_publish_time(['16:10  发布于拉勾网 发布于拉勾网'])
+print(a)

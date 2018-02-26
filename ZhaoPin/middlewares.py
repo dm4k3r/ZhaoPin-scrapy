@@ -9,6 +9,9 @@ from scrapy import signals
 import logging
 from fake_useragent import UserAgent
 import requests
+from scrapy.exceptions import  IgnoreRequest
+from ZhaoPin.ulits.common import get_md5
+import redis
 from twisted.internet.error import TimeoutError, ConnectionRefusedError, ConnectError
 from datetime import datetime, timedelta
 from twisted.web._newclient import ResponseNeverReceived
@@ -109,6 +112,21 @@ logger = logging.getLogger(__name__)
 #
 #     def spider_opened(self, spider):
 #         spider.logger.info('Spider opened: %s' % spider.name)
+
+class IngoreRequestMiddleware(object):
+    """
+    忽略已经爬取的url
+    """
+    def __init__(self):
+        self.redis_db = redis.Redis(host='192.168.1.110', port=6379, db=1)
+        self.redis_data_dict = "hex_url"
+
+    def process_request(self, request, spider):
+        url_id = get_md5(request.url)
+        if self.redis_db.hexists(self.redis_data_dict, url_id):
+            logger.info("已经爬取,忽略url: {}".format(request.url))
+            raise IgnoreRequest("IgnoreRequest : {0}".format(request.url))
+
 
 class RandomUserAgentMiddleware(object):
     """

@@ -54,7 +54,8 @@ DEFAULT_REQUEST_HEADERS = {
 DOWNLOADER_MIDDLEWARES = {
     'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
     'scrapy.contrib.downloadermiddleware.httpproxy.HttpProxyMiddleware': None,
-    'ZhaoPin.middlewares.RandomUserAgentMiddleware': 430,
+    'ZhaoPin.middlewares.IngoreRequestMiddleware': 430,
+    'ZhaoPin.middlewares.RandomUserAgentMiddleware': 440,
     'ZhaoPin.middlewares.HttpProxyMiddleware': 450,
 }
 
@@ -67,8 +68,9 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-   'ZhaoPin.pipelines.DuplicatePipeline': 290,
-   'ZhaoPin.pipelines.MysqlTwsitedPipeline': 300,
+    'ZhaoPin.pipelines.DuplicatePipeline': 290,
+    'ZhaoPin.pipelines.InsertRedis': 295,
+    'ZhaoPin.pipelines.MysqlTwsitedPipeline': 300,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

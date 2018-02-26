@@ -9,7 +9,7 @@ import scrapy
 from scrapy.loader import ItemLoader
 from scrapy.loader.processors import TakeFirst, Join, MapCompose
 from ZhaoPin.ulits.common import wages_convert, remov_tag, max_num, min_num, filter_education_requirements,\
-    filter_addrs, filter_company
+    filter_addrs, filter_company, filter_url, filter_publish_time
 
 
 class ZhaoPinItem(ItemLoader):
@@ -20,7 +20,7 @@ class LagouItem(scrapy.Item):
     # url转换md5
     url_id = scrapy.Field()
     # 职位描述url
-    url = scrapy.Field()
+    url = scrapy.Field(input_processor=filter_url)
     # 公司
     company = scrapy.Field(input_processor=filter_company)
     # 职位
@@ -43,6 +43,8 @@ class LagouItem(scrapy.Item):
     description = scrapy.Field()
     # 工作地点
     address = scrapy.Field(input_processor=filter_addrs)
+    # 发布时间
+    publish_time = scrapy.Field(input_processor=MapCompose(filter_publish_time))
     #爬取生成时间
     crawl_created_time = scrapy.Field()
     #爬取更新时间
@@ -52,8 +54,9 @@ class LagouItem(scrapy.Item):
     def get_insert_sql(self):
         insert_sql = """
             INSERT INTO lagou (url_id, url, company, position, minimum_wage, maximum_wage, location, minimum_experience,
-            maximum_experience, education_requirements, type, description, address, crawl_created_time, crawl_updated_time)
-            VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ON DUPLICATE KEY UPDATE company=VALUES(company),
+            maximum_experience, education_requirements, type, description, address, publish_time, crawl_created_time,
+            crawl_updated_time)
+            VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ON DUPLICATE KEY UPDATE company=VALUES(company),
             minimum_wage=VALUES(minimum_wage), maximum_wage=VALUES(maximum_wage), position=VALUES(position), 
             minimum_experience=VALUES(maximum_experience), maximum_experience=VALUES(maximum_experience), 
             education_requirements=VALUES(education_requirements), type=VALUES(type), description=VALUES(description),
@@ -62,6 +65,6 @@ class LagouItem(scrapy.Item):
         parmas = (self.get('url_id'), self.get('url'), self.get('company'), self.get('position'), self.get('minimum_wage'),
                   self.get('maximum_wage'), self.get('location'), self.get('minimum_experience'), self.get('maximum_experience'),
                   self.get('education_requirements'), self.get('type'), self.get('description'), self.get('address'),
-                  self.get('crawl_created_time'),self.get('crawl_updated_time'))
+                  self.get('publish_time'),self.get('crawl_created_time'),self.get('crawl_updated_time'))
         return (insert_sql, parmas)
 

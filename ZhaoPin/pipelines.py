@@ -11,10 +11,9 @@ from scrapy.exceptions import DropItem
 import logging
 
 logger = logging.getLogger(__name__)
-
-# 实例化redis数据库
-redis_db = redis.Redis(host='192.168.1.110', port=6379, db=4) # password='ws1689371'
+redis_db = redis.Redis(host='192.168.1.110', port=6379, db=1)
 redis_data_dict = "hex_url"
+
 
 class DuplicatePipeline(object):
     """
@@ -49,8 +48,14 @@ class DuplicatePipeline(object):
 
     # 处理item，取item里的url和key里的字段对比，看是否存在，存在就丢掉这个item。不存在返回item给后面的函数处理
     def process_item(self, item, spider):
-        if redis_db.hexists(redis_data_dict, item['url_id']):  #
+        if redis_db.hexists(redis_data_dict, item['url_id']):
             raise DropItem("Duplicate item found: {0}".format(item))
+        return item
+
+
+class InsertRedis(object):
+    def process_item(self, item, spider):
+        redis_db.hset(redis_data_dict, item['url_id'], 0)
         return item
 
 
