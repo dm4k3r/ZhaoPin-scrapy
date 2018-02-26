@@ -53,6 +53,7 @@ class LagouSpider(CrawlSpider):
         Item.add_value('description', description)
         Item.add_xpath('address', '//div[@class="work_addr"]/a/text()')
         Item.add_xpath('publish_time', '//p[@class="publish_time"]/text()')
+        Item.add_xpath('status', '//div[@class="resume-deliver"]/a/text()')
         Item.add_value('crawl_created_time', datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         Item.add_value('crawl_updated_time', datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         yield Item.load_item()
