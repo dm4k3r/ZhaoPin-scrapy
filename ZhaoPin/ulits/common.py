@@ -6,6 +6,8 @@ from datetime import timedelta
 
 def get_md5(url):
     if isinstance(url, str):
+        if re.match("(https://www.lagou.com/jobs/\d+.html)", url):
+            url = re.match("(https://www.lagou.com/jobs/\d+.html)", url).group()
         url = url.encode('utf8')
     m = hashlib.md5()
     m.update(url)

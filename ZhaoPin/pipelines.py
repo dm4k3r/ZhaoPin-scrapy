@@ -11,7 +11,7 @@ from scrapy.exceptions import DropItem
 import logging
 
 logger = logging.getLogger(__name__)
-redis_db = redis.Redis(host='192.168.1.110', port=6379, db=1)
+redis_db = redis.Redis(host='127.0.0.1', port=6379, db=1)
 redis_data_dict = "hex_url"
 
 

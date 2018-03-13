@@ -118,7 +118,7 @@ class IngoreRequestMiddleware(object):
     忽略已经爬取的url
     """
     def __init__(self):
-        self.redis_db = redis.Redis(host='192.168.1.110', port=6379, db=1)
+        self.redis_db = redis.Redis(host='127.0.0.1', port=6379, db=1)
         self.redis_data_dict = "hex_url"
 
     def process_request(self, request, spider):
